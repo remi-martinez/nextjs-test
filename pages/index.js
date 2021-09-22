@@ -1,7 +1,17 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { getSortedPostsData } from '../lib/posts'
 
-export default function Home() {
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+}
+
+export default function Home({ allPostsData }) {
   return (
     <div className="container">
       <Head>
@@ -50,7 +60,23 @@ export default function Home() {
             </p>
           </a>
         </div>
+
       </main>
+
+      <section>
+        <h2>Blog</h2>
+        <ul>
+          {
+            allPostsData.map(({ id, date, title }) => (
+                <li key={id}>
+                  {title} <br/>
+                  {id} <br/>
+                  {date} <br/>
+                </li>
+            ))
+          }
+        </ul>
+      </section>
 
       <footer>
         <a
@@ -58,8 +84,6 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className="logo" />
         </a>
       </footer>
 
